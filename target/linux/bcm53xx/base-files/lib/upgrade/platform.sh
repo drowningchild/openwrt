@@ -1,4 +1,4 @@
-RAMFS_COPY_BIN='osafeloader oseama'
+RAMFS_COPY_BIN='osafeloader oseama otrx'
 
 PART_NAME=firmware
 
@@ -88,7 +88,10 @@ platform_check_image() {
 
 			if ! otrx check "$1" -o "$header_len"; then
 				echo "No valid TRX firmware in the CHK image"
+				notify_firmware_test_result "trx_valid" 0
 				error=1
+			else
+				notify_firmware_test_result "trx_valid" 1
 			fi
 		;;
 		"cybertan")
@@ -103,7 +106,10 @@ platform_check_image() {
 
 			if ! otrx check "$1" -o 32; then
 				echo "No valid TRX firmware in the CyberTAN image"
+				notify_firmware_test_result "trx_valid" 0
 				error=1
+			else
+				notify_firmware_test_result "trx_valid" 1
 			fi
 		;;
 		"safeloader")
@@ -133,11 +139,15 @@ platform_check_image() {
 
 			if ! otrx check "$1"; then
 				echo "Invalid (corrupted?) TRX firmware"
+				notify_firmware_test_result "trx_valid" 0
 				error=1
+			else
+				notify_firmware_test_result "trx_valid" 1
 			fi
 		;;
 		*)
-			echo "Invalid image type. Please use only .trx files"
+			echo "Invalid image type. Please use firmware specific for this device."
+			notify_firmware_broken
 			error=1
 		;;
 	esac
@@ -147,7 +157,7 @@ platform_check_image() {
 
 # $(1): image for upgrade (with possible extra header)
 # $(2): offset of trx in image
-platform_pre_upgrade_trx() {
+platform_do_upgrade_nand_trx() {
 	local dir="/tmp/sysupgrade-bcm53xx"
 	local trx="$1"
 	local offset="$2"
@@ -210,7 +220,7 @@ platform_pre_upgrade_trx() {
 	nand_do_upgrade /tmp/root.ubi
 }
 
-platform_pre_upgrade_seama() {
+platform_do_upgrade_nand_seama() {
 	local dir="/tmp/sysupgrade-bcm53xx"
 	local seama="$1"
 	local tmp
@@ -255,20 +265,6 @@ platform_pre_upgrade_seama() {
 	mtd write $dir/kernel.seama firmware || exit 1
 	mtd ${kernel_size:+-c 0x$kernel_size} fixseama firmware
 	nand_do_upgrade $dir/root.ubi
-}
-
-platform_pre_upgrade() {
-	local file_type=$(platform_identify "$1")
-
-	[ "$(platform_flash_type)" != "nand" ] && return
-
-	# Find trx offset
-	case "$file_type" in
-		"chk")		platform_pre_upgrade_trx "$1" $((0x$(get_magic_long_at "$1" 4)));;
-		"cybertan")	platform_pre_upgrade_trx "$1" 32;;
-		"seama")	platform_pre_upgrade_seama "$1";;
-		"trx")		platform_pre_upgrade_trx "$1";;
-	esac
 }
 
 platform_trx_from_chk_cmd() {
@@ -321,6 +317,15 @@ platform_do_upgrade() {
 	local cmd=
 
 	[ "$(platform_flash_type)" == "nand" ] && {
+		case "$file_type" in
+			"chk")		platform_do_upgrade_nand_trx "$1" $((0x$(get_magic_long_at "$1" 4)));;
+			"cybertan")	platform_do_upgrade_nand_trx "$1" 32;;
+			"seama")	platform_do_upgrade_nand_seama "$1";;
+			"trx")		platform_do_upgrade_nand_trx "$1";;
+		esac
+
+		# Above calls exit on success.
+		# If we got here something went wrong.
 		echo "Writing whole image to NAND flash. All erase counters will be lost."
 	}
 
