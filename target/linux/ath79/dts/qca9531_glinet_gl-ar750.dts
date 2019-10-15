@@ -10,6 +10,10 @@
 	compatible = "glinet,gl-ar750", "qca,qca9531";
 	model = "GL.iNet GL-AR750";
 
+	aliases {
+		label-mac-device = &eth0;
+	};
+
 	keys {
 		compatible = "gpio-keys";
 
@@ -49,7 +53,6 @@
 			gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
 			linux,default-trigger = "phy0tpt";
 		};
-
 	};
 
 	i2c {
@@ -58,8 +61,6 @@
 		sda-gpios = <&gpio 17 GPIO_ACTIVE_LOW>;
 		scl-gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
 	};
-
-
 };
 
 &pcie0 {

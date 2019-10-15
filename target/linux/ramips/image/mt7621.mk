@@ -106,6 +106,16 @@ define Device/asiarf_ap7621-001
 endef
 TARGET_DEVICES += asiarf_ap7621-001
 
+define Device/asiarf_ap7621-nv1
+  MTK_SOC := mt7621
+  IMAGE_SIZE := 16000k
+  DEVICE_VENDOR := AsiaRF
+  DEVICE_MODEL := AP7621-NV1
+  DEVICE_PACKAGES := \
+	kmod-sdhci-mt7620 kmod-mt76x2 kmod-usb3
+endef
+TARGET_DEVICES += asiarf_ap7621-nv1
+
 define Device/asus_rt-ac57u
   MTK_SOC := mt7621
   DEVICE_VENDOR := ASUS
@@ -114,6 +124,22 @@ define Device/asus_rt-ac57u
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic
 endef
 TARGET_DEVICES += asus_rt-ac57u
+
+define Device/asus_rt-ac85p
+  MTK_SOC := mt7621
+  DEVICE_VENDOR := ASUS
+  DEVICE_MODEL := RT-AC85P
+  IMAGE_SIZE := 51200k
+  UBINIZE_OPTS := -E 5
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  KERNEL_SIZE := 4096k
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | check-size $$$$(IMAGE_SIZE)
+  DEVICE_PACKAGES := kmod-usb3 kmod-mt7615e wpad-basic uboot-envtools
+endef
+TARGET_DEVICES += asus_rt-ac85p
 
 define Device/buffalo_wsr-1166dhp
   MTK_SOC := mt7621
@@ -172,6 +198,20 @@ define Device/d-team_pbr-m1
   SUPPORTED_DEVICES += pbr-m1
 endef
 TARGET_DEVICES += d-team_pbr-m1
+
+define Device/edimax_rg21s
+  MTK_SOC := mt7621
+  IMAGE_SIZE := 16064k
+  DEVICE_VENDOR := Edimax
+  DEVICE_MODEL := Gemini AC2600 RG21S
+  IMAGES += factory.bin
+  IMAGE/factory.bin := \
+    $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | \
+    elx-header 02020038 8844A2D168B45A2D
+  DEVICE_PACKAGES := \
+        kmod-mt7615e wpad-basic
+endef
+TARGET_DEVICES += edimax_rg21s
 
 define Device/elecom_wrc-1167ghbk2-s
   MTK_SOC := mt7621
@@ -281,6 +321,19 @@ define Device/iodata_wn-gx300gr
   DEVICE_PACKAGES := kmod-mt7603 wpad-basic
 endef
 TARGET_DEVICES += iodata_wn-gx300gr
+
+define Device/iodata_wnpr2600g
+  MTK_SOC := mt7621
+  DEVICE_VENDOR := I-O DATA
+  DEVICE_MODEL := WNPR2600G
+  IMAGE_SIZE := 13952k
+  IMAGES += factory.bin
+  IMAGE/factory.bin := \
+    $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | \
+    elx-header 0104003a 8844A2D168B45A2D
+  DEVICE_PACKAGES := kmod-mt7615e wpad-basic
+endef
+TARGET_DEVICES += iodata_wnpr2600g
 
 define Device/lenovo_newifi-d1
   MTK_SOC := mt7621
@@ -495,6 +548,8 @@ define Device/phicomm_k2p
   IMAGE_SIZE := 15744k
   DEVICE_VENDOR := Phicomm
   DEVICE_MODEL := K2P
+  DEVICE_ALT0_VENDOR := Phicomm
+  DEVICE_ALT0_MODEL := KE 2P
   SUPPORTED_DEVICES += k2p
   DEVICE_PACKAGES := kmod-mt7615e wpad-basic
 endef
@@ -709,6 +764,15 @@ define Device/xiaomi_mir3p
 endef
 TARGET_DEVICES += xiaomi_mir3p
 
+define Device/xiaoyu_xy-c5
+  MTK_SOC := mt7621
+  IMAGE_SIZE := 32448k
+  DEVICE_VENDOR := XiaoYu
+  DEVICE_MODEL := XY-C5
+  DEVICE_PACKAGES := kmod-ata-core kmod-ata-ahci kmod-usb3
+endef
+TARGET_DEVICES += xiaoyu_xy-c5
+
 define Device/xzwifi_creativebox-v1
   MTK_SOC := mt7621
   IMAGE_SIZE := 32448k
@@ -743,7 +807,7 @@ TARGET_DEVICES += youku_yk-l2
 define Device/zbtlink_zbt-we1326
   MTK_SOC := mt7621
   IMAGE_SIZE := 16064k
-  DEVICE_VENDOR := ZBT
+  DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WE1326
   DEVICE_PACKAGES := \
 	kmod-mt7603 kmod-mt76x2 kmod-usb3 kmod-sdhci-mt7620 wpad-basic
@@ -754,7 +818,7 @@ TARGET_DEVICES += zbtlink_zbt-we1326
 define Device/zbtlink_zbt-we3526
   MTK_SOC := mt7621
   IMAGE_SIZE := 16064k
-  DEVICE_VENDOR := ZBT
+  DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WE3526
   DEVICE_PACKAGES := \
 	kmod-sdhci-mt7620 kmod-mt7603 kmod-mt76x2 \
@@ -765,7 +829,7 @@ TARGET_DEVICES += zbtlink_zbt-we3526
 define Device/zbtlink_zbt-wg2626
   MTK_SOC := mt7621
   IMAGE_SIZE := 16064k
-  DEVICE_VENDOR := ZBT
+  DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WG2626
   DEVICE_PACKAGES := \
 	kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-mt76x2 kmod-usb3 \
@@ -777,7 +841,7 @@ TARGET_DEVICES += zbtlink_zbt-wg2626
 define Device/zbtlink_zbt-wg3526-16m
   MTK_SOC := mt7621
   IMAGE_SIZE := 16064k
-  DEVICE_VENDOR := ZBT
+  DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WG3526
   DEVICE_VARIANT := 16M
   DEVICE_PACKAGES := \
@@ -790,7 +854,7 @@ TARGET_DEVICES += zbtlink_zbt-wg3526-16m
 define Device/zbtlink_zbt-wg3526-32m
   MTK_SOC := mt7621
   IMAGE_SIZE := 32448k
-  DEVICE_VENDOR := ZBT
+  DEVICE_VENDOR := Zbtlink
   DEVICE_MODEL := ZBT-WG3526
   DEVICE_VARIANT := 32M
   DEVICE_PACKAGES := \
