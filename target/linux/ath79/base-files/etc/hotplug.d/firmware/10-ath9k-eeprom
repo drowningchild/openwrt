@@ -34,7 +34,8 @@ case "$FIRMWARE" in
 	iodata,wn-ac1167dgr|\
 	iodata,wn-ac1600dgr|\
 	iodata,wn-ac1600dgr2|\
-	iodata,wn-ag300dgr)
+	iodata,wn-ag300dgr|\
+	sitecom,wlr-7100)
 		caldata_extract "art" 0x1000 0x440
 		ath9k_patch_mac $(mtd_get_mac_ascii u-boot-env ethaddr)
 		;;
@@ -78,6 +79,8 @@ case "$FIRMWARE" in
 	winchannel,wb2000)
 		caldata_extract "art" 0x5000 0x440
 		;;
+	netgear,wnr1000-v2|\
+	netgear,wnr2000-v3|\
 	netgear,wnr612-v2|\
 	on,n150r|\
 	pcs,cap324|\
@@ -108,7 +111,7 @@ case "$FIRMWARE" in
 		;;
 	wd,mynet-wifi-rangeextender)
 		caldata_extract "art" 0x1000 0x1000
-		ath9k_patch_mac $(nvram get wl0_hwaddr) "$mac"
+		ath9k_patch_mac $(nvram get wl0_hwaddr)
 		;;
 	*)
 		caldata_die "board $board is not supported yet"
