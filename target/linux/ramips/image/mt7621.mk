@@ -93,6 +93,15 @@ define Device/11acnas
 endef
 TARGET_DEVICES += 11acnas
 
+define Device/alfa-network_quad-e4g
+  DTS := QUAD-E4G
+  IMAGE_SIZE := 16064k
+  DEVICE_TITLE := ALFA Network Quad-E4G
+  DEVICE_PACKAGES := kmod-ata-core kmod-ata-ahci kmod-sdhci-mt7620 kmod-usb3 \
+	uboot-envtools
+endef
+TARGET_DEVICES += alfa-network_quad-e4g
+
 define Device/asus_rt-ac57u
   DTS := RT-AC57U
   DEVICE_TITLE := ASUS RT-AC57U
@@ -106,7 +115,7 @@ define Device/dir-860l-b1
   DTS := DIR-860L-B1
   BLOCKSIZE := 64k
   SEAMA_SIGNATURE := wrgac13_dlink.2013gui_dir860lb
-  KERNEL := kernel-bin | patch-dtb | relocate-kernel | lzma | uImage lzma
+  KERNEL := kernel-bin | append-dtb | relocate-kernel | lzma | uImage lzma
   IMAGE_SIZE := $(ralink_default_fw_size_16M)
   DEVICE_TITLE := D-Link DIR-860L B1
   DEVICE_PACKAGES := kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic
