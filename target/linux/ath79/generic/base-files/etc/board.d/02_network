@@ -37,6 +37,7 @@ ath79_setup_interfaces()
 	tplink,re355-v1|\
 	tplink,re450-v1|\
 	tplink,re450-v2|\
+	tplink,tl-wr902ac-v1|\
 	ubnt,bullet-m|\
 	ubnt,bullet-m-xw|\
 	ubnt,lap-120|\
@@ -212,7 +213,8 @@ ath79_setup_interfaces()
 	tplink,archer-c7-v4|\
 	tplink,archer-c7-v5|\
 	tplink,tl-wdr3600-v1|\
-	tplink,tl-wdr4300-v1)
+	tplink,tl-wdr4300-v1|\
+	tplink,tl-wdr4300-v1-il)
 		ucidef_add_switch "switch0" \
 			"0@eth0" "2:lan:1" "3:lan:2" "4:lan:3" "5:lan:4" "1:wan"
 		;;
@@ -386,6 +388,12 @@ ath79_setup_macs()
 	tplink,tl-wr1043nd-v4|\
 	tplink,tl-wr1043n-v5)
 		base_mac=$(mtd_get_mac_binary info 0x8)
+		wan_mac=$(macaddr_add "$base_mac" 1)
+		;;
+	tplink,tl-wdr3600-v1|\
+	tplink,tl-wdr4300-v1|\
+	tplink,tl-wdr4300-v1-il)
+		base_mac=$(mtd_get_mac_binary u-boot 0x1fc00)
 		wan_mac=$(macaddr_add "$base_mac" 1)
 		;;
 	trendnet,tew-823dru)
