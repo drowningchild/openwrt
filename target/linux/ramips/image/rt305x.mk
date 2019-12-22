@@ -69,6 +69,7 @@ define Device/a5-v11
 	$$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | poray-header -B A5-V11 -F 4M
   DEVICE_TITLE := A5-V11
   DEVICE_PACKAGES := kmod-usb-core kmod-usb-ohci kmod-usb2
+  DEFAULT := n
 endef
 TARGET_DEVICES += a5-v11
 
@@ -237,6 +238,7 @@ define Device/dir-300-b7
   BLOCKSIZE := 4k
   IMAGE_SIZE := $(ralink_default_fw_size_4M)
   DEVICE_TITLE := D-Link DIR-300 B7
+  DEFAULT := n
 endef
 TARGET_DEVICES += dir-300-b7
 
@@ -650,6 +652,7 @@ define Device/rt-n10-plus
   BLOCKSIZE := 64k
   IMAGE_SIZE := $(ralink_default_fw_size_4M)
   DEVICE_TITLE := Asus RT-N10+
+  DEFAULT := n
 endef
 TARGET_DEVICES += rt-n10-plus
 
@@ -815,6 +818,7 @@ define Device/wl-351
   IMAGE_SIZE := $(ralink_default_fw_size_4M)
   DEVICE_TITLE := Sitecom WL-351 v1
   DEVICE_PACKAGES := kmod-switch-rtl8366rb kmod-swconfig swconfig
+  DEFAULT := n
 endef
 TARGET_DEVICES += wl-351
 
@@ -834,6 +838,7 @@ define Device/wr512-3gn-4M
   DTS := WR512-3GN-4M
   IMAGE_SIZE := $(ralink_default_fw_size_4M)
   DEVICE_TITLE := WR512-3GN (4M)
+  DEFAULT := n
 endef
 TARGET_DEVICES += wr512-3gn-4M
 
@@ -903,6 +908,7 @@ define Device/kn
   IMAGE_SIZE := $(ralink_default_fw_size_4M)
   DEVICE_TITLE := ZyXEL Keenetic
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-ehci kmod-usb-ledtrig-usbport
+  DEFAULT := n
 endef
 TARGET_DEVICES += kn
 

@@ -55,6 +55,28 @@ define Device/tplink_archer-c59-v1
 endef
 TARGET_DEVICES += tplink_archer-c59-v1
 
+define Device/tplink_archer-c60-v1
+  $(Device/tplink-safeloader-uimage)
+  ATH_SOC := qca9561
+  IMAGE_SIZE := 7936k
+  DEVICE_TITLE := TP-Link Archer C60 v1
+  TPLINK_BOARD_ID := ARCHER-C60-V1
+  DEVICE_PACKAGES := kmod-ath10k-ct ath10k-firmware-qca9888-ct
+  SUPPORTED_DEVICES += archer-c60-v1
+endef
+TARGET_DEVICES += tplink_archer-c60-v1
+
+define Device/tplink_archer-c60-v2
+  $(Device/tplink-safeloader-uimage)
+  ATH_SOC := qca9561
+  IMAGE_SIZE := 7808k
+  DEVICE_TITLE := TP-Link Archer C60 v2
+  TPLINK_BOARD_ID := ARCHER-C60-V2
+  DEVICE_PACKAGES := kmod-ath10k-ct ath10k-firmware-qca9888-ct
+  SUPPORTED_DEVICES += archer-c60-v2
+endef
+TARGET_DEVICES += tplink_archer-c60-v2
+
 define Device/tplink_archer-c6-v2
   $(Device/tplink-safeloader-uimage)
   ATH_SOC := qca9563
@@ -211,6 +233,16 @@ define Device/tplink_tl-wdr4300-v1
   SUPPORTED_DEVICES += tl-wdr4300
 endef
 TARGET_DEVICES += tplink_tl-wdr4300-v1
+
+define Device/tplink_tl-wdr4300-v1-il
+  $(Device/tplink-8mlzma)
+  ATH_SOC := ar9344
+  DEVICE_TITLE := TP-Link TL-WDR4300 v1 (IL)
+  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ledtrig-usbport
+  TPLINK_HWID := 0x43008001
+  SUPPORTED_DEVICES += tl-wdr4300
+endef
+TARGET_DEVICES += tplink_tl-wdr4300-v1-il
 
 define Device/tplink_tl-wdr4900-v2
   $(Device/tplink-8mlzma)
