@@ -209,7 +209,7 @@ define Device/netgear_xr500
         $(call Device/DniImage)
 	DEVICE_VENDOR := NETGEAR
 	DEVICE_MODEL := xr500
-        DEVICE_DTS := qcom-ipq8065-xr500
+	SOC := qcom-ipq8065
         KERNEL_SIZE := 4096k
         NETGEAR_BOARD_ID := XR500
         NETGEAR_HW_ID := 29764958+0+256+512+4x4+4x4+cascade
