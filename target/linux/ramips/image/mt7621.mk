@@ -224,6 +224,20 @@ define Device/d-team_pbr-m1
 endef
 TARGET_DEVICES += d-team_pbr-m1
 
+define Device/edimax_ra21s
+  SOC := mt7621
+  IMAGE_SIZE := 16064k
+  DEVICE_VENDOR := Edimax
+  DEVICE_MODEL := RA21S
+  DEVICE_ALT0_VENDOR := Edimax
+  DEVICE_ALT0_MODEL := Gemini RA21S
+  IMAGES += factory.bin
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | \
+	elx-header 02020040 8844A2D168B45A2D
+  DEVICE_PACKAGES := kmod-mt7615e wpad-basic
+endef
+TARGET_DEVICES += edimax_ra21s
+
 define Device/edimax_rg21s
   SOC := mt7621
   IMAGE_SIZE := 16064k
@@ -367,6 +381,16 @@ define Device/iptime_a6ns-m
   DEVICE_PACKAGES := kmod-mt7615e kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic
 endef
 TARGET_DEVICES += iptime_a6ns-m
+
+define Device/iptime_a8004t
+  SOC := mt7621
+  IMAGE_SIZE := 16128k
+  UIMAGE_NAME := a8004t
+  DEVICE_VENDOR := ipTIME
+  DEVICE_MODEL := A8004T
+  DEVICE_PACKAGES := kmod-mt7615e kmod-usb3 wpad-basic
+endef
+TARGET_DEVICES += iptime_a8004t
 
 define Device/jcg_jhr-ac876m
   SOC := mt7621
