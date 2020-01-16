@@ -90,6 +90,8 @@ hostapd_common_add_device_config() {
 
 	config_add_string country
 	config_add_boolean country_ie doth
+	config_add_boolean spectrum_mgmt_required
+	config_add_int local_pwr_constraint
 	config_add_string require_mode
 	config_add_boolean legacy_rates
 
@@ -106,11 +108,13 @@ hostapd_prepare_device_config() {
 	local base="${config%%.conf}"
 	local base_cfg=
 
-	json_get_vars country country_ie beacon_int:100 doth require_mode legacy_rates acs_chan_bias
+	json_get_vars country country_ie beacon_int:100 dtim_period:2 doth require_mode legacy_rates \
+		acs_chan_bias local_pwr_constraint spectrum_mgmt_required
 
 	hostapd_set_log_options base_cfg
 
 	set_default country_ie 1
+	set_default spectrum_mgmt_required 0
 	set_default doth 1
 	set_default legacy_rates 1
 
@@ -119,7 +123,11 @@ hostapd_prepare_device_config() {
 	[ -n "$country" ] && {
 		append base_cfg "country_code=$country" "$N"
 
-		[ "$country_ie" -gt 0 ] && append base_cfg "ieee80211d=1" "$N"
+		[ "$country_ie" -gt 0 ] && {
+			append base_cfg "ieee80211d=1" "$N"
+			[ -n "$local_pwr_constraint" ] && append base_cfg "local_pwr_constraint=$local_pwr_constraint" "$N"
+			[ "$spectrum_mgmt_required" -gt 0 ] && append base_cfg "spectrum_mgmt_required=$spectrum_mgmt_required" "$N"
+		}
 		[ "$hwmode" = "a" -a "$doth" -gt 0 ] && append base_cfg "ieee80211h=1" "$N"
 	}
 
@@ -154,6 +162,7 @@ hostapd_prepare_device_config() {
 	[ -n "$rlist" ] && append base_cfg "supported_rates=$rlist" "$N"
 	[ -n "$brlist" ] && append base_cfg "basic_rates=$brlist" "$N"
 	append base_cfg "beacon_int=$beacon_int" "$N"
+	append base_cfg "dtim_period=$dtim_period" "$N"
 
 	json_get_values opts hostapd_options
 	for val in $opts; do
@@ -176,6 +185,7 @@ hostapd_common_add_bss_config() {
 	config_add_int \
 		wep_rekey eap_reauth_period \
 		wpa_group_rekey wpa_pair_rekey wpa_master_rekey
+	config_add_boolean wpa_strict_rekey
 	config_add_boolean wpa_disable_eapol_key_retries
 
 	config_add_boolean tdls_prohibit
@@ -261,7 +271,7 @@ hostapd_set_bss_options() {
 	local wep_rekey wpa_group_rekey wpa_pair_rekey wpa_master_rekey wpa_key_mgmt
 
 	json_get_vars \
-		wep_rekey wpa_group_rekey wpa_pair_rekey wpa_master_rekey \
+		wep_rekey wpa_group_rekey wpa_pair_rekey wpa_master_rekey wpa_strict_rekey \
 		wpa_disable_eapol_key_retries tdls_prohibit \
 		maxassoc max_inactivity disassoc_low_ack isolate auth_cache \
 		wps_pushbutton wps_label ext_registrar wps_pbc_in_m1 wps_ap_setup_locked \
@@ -316,6 +326,7 @@ hostapd_set_bss_options() {
 		[ -n "$wpa_group_rekey"  ] && append bss_conf "wpa_group_rekey=$wpa_group_rekey" "$N"
 		[ -n "$wpa_pair_rekey"   ] && append bss_conf "wpa_ptk_rekey=$wpa_pair_rekey"    "$N"
 		[ -n "$wpa_master_rekey" ] && append bss_conf "wpa_gmk_rekey=$wpa_master_rekey"  "$N"
+		[ -n "$wpa_strict_rekey" ] && append bss_conf "wpa_strict_rekey=$wpa_strict_rekey" "$N"
 	}
 
 	[ -n "$nasid" ] && append bss_conf "nas_identifier=$nasid" "$N"
