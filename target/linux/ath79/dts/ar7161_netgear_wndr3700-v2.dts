@@ -4,8 +4,8 @@
 #include "ar7161_netgear_wndr3700.dtsi"
 
 / {
-	compatible = "netgear,wndr3700v2", "qca,ar7161";
-	model = "Netgear WNDR3700v2";
+	compatible = "netgear,wndr3700-v2", "qca,ar7161";
+	model = "Netgear WNDR3700 v2";
 };
 
 &partitions {
@@ -18,7 +18,6 @@
 	partition@50000 {
 		label = "u-boot-env";
 		reg = <0x050000 0x020000>;
-		read-only;
 	};
 
 	partition@70000 {
