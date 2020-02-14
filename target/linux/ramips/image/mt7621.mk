@@ -81,6 +81,12 @@ define Build/iodata-mstc-header
   )
 endef
 
+define Build/netis-tail
+	echo -n $(1) >> $@
+	echo -n $(UIMAGE_NAME)-yun | $(STAGING_DIR_HOST)/bin/mkhash md5 | \
+		sed 's/../\\\\x&/g' | xargs echo -ne >> $@
+endef
+
 define Build/ubnt-erx-factory-image
 	if [ -e $(KDIR)/tmp/$(KERNEL_INITRAMFS_IMAGE) -a "$$(stat -c%s $@)" -lt "$(KERNEL_SIZE)" ]; then \
 		echo '21001:6' > $(1).compat; \
@@ -624,21 +630,24 @@ define Device/netgear_wndr3700-v5
 endef
 TARGET_DEVICES += netgear_wndr3700-v5
 
-define Device/netis_wf-2881
+define Device/netis_wf2881
   BLOCKSIZE := 128k
   PAGESIZE := 2048
   FILESYSTEMS := squashfs
+  KERNEL_SIZE := 4096k
   IMAGE_SIZE := 129280k
-  KERNEL := $(KERNEL_DTB) | pad-offset $$(BLOCKSIZE) 64 | uImage lzma
   UBINIZE_OPTS := -E 5
-  IMAGE/sysupgrade.bin := append-kernel | append-ubi | append-metadata | \
+  UIMAGE_NAME := WF2881_0.0.00
+  KERNEL_INITRAMFS := $(KERNEL_DTB) | netis-tail WF2881 | uImage lzma
+  IMAGES += factory.bin
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  IMAGE/factory.bin := append-kernel | pad-to $$$$(KERNEL_SIZE) | append-ubi | \
 	check-size $$$$(IMAGE_SIZE)
   DEVICE_VENDOR := NETIS
-  DEVICE_MODEL := WF-2881
+  DEVICE_MODEL := WF2881
   DEVICE_PACKAGES := kmod-mt76x2 kmod-usb3 kmod-usb-ledtrig-usbport wpad-basic
-  SUPPORTED_DEVICES += wf-2881
 endef
-TARGET_DEVICES += netis_wf-2881
+TARGET_DEVICES += netis_wf2881
 
 define Device/phicomm_k2p
   IMAGE_SIZE := 15744k
