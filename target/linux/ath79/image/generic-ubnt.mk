@@ -34,7 +34,7 @@ define Device/ubnt
   DEVICE_PACKAGES := kmod-usb2
   IMAGES += factory.bin
   IMAGE/factory.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | \
-	append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE) | mkubntimage-split
+	append-rootfs | pad-rootfs | check-size | mkubntimage-split
 endef
 
 define Device/ubnt-bz
@@ -112,6 +112,16 @@ define Device/ubnt_airrouter
   SUPPORTED_DEVICES += airrouter
 endef
 TARGET_DEVICES += ubnt_airrouter
+
+define Device/ubnt_bullet-m-ar7240
+  $(Device/ubnt-xm)
+  SOC := ar7240
+  DEVICE_MODEL := Bullet-M
+  DEVICE_VARIANT := XM (AR7240)
+  DEVICE_PACKAGES += rssileds
+  SUPPORTED_DEVICES += bullet-m
+endef
+TARGET_DEVICES += ubnt_bullet-m-ar7240
 
 define Device/ubnt_bullet-m-ar7241
   $(Device/ubnt-xm)
@@ -241,7 +251,7 @@ define Device/ubnt_routerstation_common
   IMAGE_SIZE := 16128k
   IMAGES := factory.bin
   IMAGE/factory.bin := append-rootfs | pad-rootfs | mkubntimage | \
-	check-size $$$$(IMAGE_SIZE)
+	check-size
   KERNEL := kernel-bin | append-dtb | lzma | pad-to $$(BLOCKSIZE)
   KERNEL_INITRAMFS := kernel-bin | append-dtb
 endef
