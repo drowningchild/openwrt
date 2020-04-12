@@ -27,9 +27,9 @@ platform_do_upgrade() {
 			fi
 		}
 		;;
-	mikrotik,rb750gr3|\
-	mikrotik,rbm11g|\
-	mikrotik,rbm33g)
+	mikrotik,routerboard-750gr3|\
+	mikrotik,routerboard-m11g|\
+	mikrotik,routerboard-m33g)
 		[ -z "$(rootfs_type)" ] && mtd erase firmware
 		;;
 	asus,rt-ac65p|\
@@ -57,6 +57,7 @@ platform_do_upgrade() {
 		nand_do_upgrade "$1"
 		;;
 	iodata,wn-ax1167gr2|\
+	iodata,wn-ax2033gr|\
 	iodata,wn-dx1167r)
 		iodata_mstc_upgrade_prepare
 		nand_do_upgrade "$1"

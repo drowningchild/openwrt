@@ -381,6 +381,22 @@ define Device/iodata_wn-ax1167gr2
 endef
 TARGET_DEVICES += iodata_wn-ax1167gr2
 
+define Device/iodata_wn-ax2033gr
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  UBINIZE_OPTS := -E 5
+  UIMAGE_MAGIC := 0x434f4d42
+  KERNEL_SIZE := 4096k
+  IMAGE_SIZE := 51200k
+  DEVICE_VENDOR := I-O DATA
+  DEVICE_MODEL := WN-AX2033GR
+  KERNEL_INITRAMFS := $(KERNEL_DTB) | custom-initramfs-uimage 3.10(VST.1)C10 | \
+	iodata-mstc-header
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  DEVICE_PACKAGES := kmod-mt7603 kmod-mt7615e wpad-basic
+endef
+TARGET_DEVICES += iodata_wn-ax2033gr
+
 define Device/iodata_wn-dx1167r
   BLOCKSIZE := 128k
   PAGESIZE := 2048
@@ -495,26 +511,27 @@ define Device/MikroTik
 	check-size
 endef
 
-define Device/mikrotik_rb750gr3
+define Device/mikrotik_routerboard-750gr3
   $(Device/MikroTik)
-  DEVICE_MODEL := RouterBOARD RB750G
-  DEVICE_VARIANT := r3
+  DEVICE_MODEL := RouterBOARD 750Gr3
   DEVICE_PACKAGES += kmod-gpio-beeper
+  SUPPORTED_DEVICES += mikrotik,rb750gr3
 endef
-TARGET_DEVICES += mikrotik_rb750gr3
+TARGET_DEVICES += mikrotik_routerboard-750gr3
 
-define Device/mikrotik_rbm11g
+define Device/mikrotik_routerboard-m11g
   $(Device/MikroTik)
   DEVICE_MODEL := RouterBOARD M11G
-  DEFAULT := n # disabled due to unknown port assignment
+  SUPPORTED_DEVICES += mikrotik,rbm11g
 endef
-TARGET_DEVICES += mikrotik_rbm11g
+TARGET_DEVICES += mikrotik_routerboard-m11g
 
-define Device/mikrotik_rbm33g
+define Device/mikrotik_routerboard-m33g
   $(Device/MikroTik)
   DEVICE_MODEL := RouterBOARD M33G
+  SUPPORTED_DEVICES += mikrotik,rbm33g
 endef
-TARGET_DEVICES += mikrotik_rbm33g
+TARGET_DEVICES += mikrotik_routerboard-m33g
 
 define Device/mqmaker_witi
   IMAGE_SIZE := 16064k

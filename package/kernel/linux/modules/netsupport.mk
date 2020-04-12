@@ -318,7 +318,7 @@ IPSEC6-m += $(ifeq ($$(strip $$(call CompareKernelPatchVer,$$(KERNEL_PATCHVER),l
 define KernelPackage/ipsec6
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=IPsec related modules (IPv6)
-  DEPENDS:=kmod-ipsec +kmod-iptunnel6
+  DEPENDS:=@IPV6 kmod-ipsec +kmod-iptunnel6
   KCONFIG:= \
 	CONFIG_INET6_AH \
 	CONFIG_INET6_ESP \
@@ -383,7 +383,7 @@ $(eval $(call KernelPackage,ip-vti))
 define KernelPackage/ip6-vti
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=IPv6 VTI (Virtual Tunnel Interface)
-  DEPENDS:=+kmod-iptunnel +kmod-ip6-tunnel +kmod-ipsec6
+  DEPENDS:=@IPV6 +kmod-iptunnel +kmod-ip6-tunnel +kmod-ipsec6
   KCONFIG:=CONFIG_IPV6_VTI
   FILES:=$(LINUX_DIR)/net/ipv6/ip6_vti.ko
   AUTOLOAD:=$(call AutoLoad,33,ip6_vti)
@@ -399,7 +399,7 @@ $(eval $(call KernelPackage,ip6-vti))
 define KernelPackage/xfrm-interface
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
   TITLE:=IPsec XFRM Interface
-  DEPENDS:=+kmod-ipsec4 +kmod-ipsec6 @!LINUX_4_14
+  DEPENDS:=+kmod-ipsec4 +@IPV6:kmod-ipsec6 @!LINUX_4_14
   KCONFIG:=CONFIG_XFRM_INTERFACE
   FILES:=$(LINUX_DIR)/net/xfrm/xfrm_interface.ko
   AUTOLOAD:=$(call AutoProbe,xfrm_interface)
@@ -866,6 +866,16 @@ define KernelPackage/sched-ctinfo
   AUTOLOAD:=$(call AutoLoad,71, act_ctinfo)
 endef
 $(eval $(call KernelPackage,sched-ctinfo))
+
+define KernelPackage/sched-police
+  SUBMENU:=$(NETWORK_SUPPORT_MENU)
+  TITLE:=Traffic shaper police support
+  DEPENDS:=+kmod-sched-core
+  KCONFIG:=CONFIG_NET_ACT_POLICE
+  FILES:=$(LINUX_DIR)/net/sched/act_police.ko
+  AUTOLOAD:=$(call AutoLoad,71, act_police)
+endef
+$(eval $(call KernelPackage,sched-police))
 
 define KernelPackage/sched-ipset
   SUBMENU:=$(NETWORK_SUPPORT_MENU)
