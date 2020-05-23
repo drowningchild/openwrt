@@ -28,8 +28,9 @@ drv_mac80211_init_device_config() {
 	config_add_string path phy 'macaddr:macaddr'
 	config_add_string hwmode
 	config_add_string tx_burst
+	config_add_string distance
 	config_add_int beacon_int chanbw frag rts
-	config_add_int rxantenna txantenna antenna_gain txpower distance
+	config_add_int rxantenna txantenna antenna_gain txpower
 	config_add_boolean noscan ht_coex acs_exclude_dfs
 	config_add_array ht_capab
 	config_add_array channels
@@ -1039,7 +1040,7 @@ list_phy_interfaces() {
 drv_mac80211_teardown() {
 	wireless_process_kill_all
 
-	for phy in `ls /sys/class/ieee80211/`; do
+	for phy in $(ls /sys/class/ieee80211/); do
 		mac80211_interface_cleanup "$phy"
 		uci -q -P /var/state revert wireless._${phy}
 	done
