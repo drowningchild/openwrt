@@ -30,10 +30,10 @@
 		serial0 = &gsbi4_serial;
 		mdio-gpio0 = &mdio0;
 
-		led-boot = &power_white;
-		led-failsafe = &power_amber;
-		led-running = &power_white;
-		led-upgrade = &power_amber;
+		led-boot = &led_power_white;
+		led-failsafe = &led_power_amber;
+		led-running = &led_power_white;
+		led-upgrade = &led_power_amber;
 		label-mac-device = &gmac2;
 	};
 
@@ -478,13 +478,13 @@
 		pinctrl-0 = <&led_pins>;
 		pinctrl-names = "default";
 
-		power_white: power_white {
+		led_power_white: power_white {
 			label = "xr500:white:power";
 			gpios = <&qcom_pinmux 53 GPIO_ACTIVE_HIGH>;
 			default-state = "keep";
 		};
 
-		power_amber: power_amber {
+		led_power_amber: power_amber {
 			label = "xr500:amber:power";
 			gpios = <&qcom_pinmux 9 GPIO_ACTIVE_HIGH>;
 		};
